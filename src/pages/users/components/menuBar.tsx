@@ -14,7 +14,6 @@ interface MenuBarProps {
 function MenuBar ({ setBooks }: MenuBarProps) {
   const { user } = useAuth()
   const [searchQuery, setSearchQuery] = useState<string>('')
-  const [isSearchFieldHidden, setIsSearchFieldHidden] = useState(true)
   const { id } = useParams<{ id: string }>();
   const deleteSession = async () => {
     // const response = await axiosInstance.delete("http://localhost:3000/session");
