@@ -47,18 +47,25 @@ function useMockAPI(): UseMockAPIReturn {
     const rubyCode = `
       require 'json'
 
+      $users = [
+        { id: 1, name: "ダイチ", email_address: "kamada@sample.com", password: "foobar0101" },
+        { id: 2, name: "カオル", email_address: "mitoma@sample.com", password: "foobar0101" },
+        { id: 3, name: "ワタル", email_address: "endo@sample.com", password: "foobar0101" }
+      ]
+
+      $books = [
+        { id: 1, title: "ダイチ", description: "kamada@sample.com", author: "foobar0101", publisher: "sample" },
+        { id: 2, title: "カオル", description: "mitoma@sample.com", author: "foobar0101", publisher: "sample" },
+        { id: 3, title: "ワタル", description: "endo@sample.com", author: "foobar0101", publisher: "sample" }
+      ]
+
       endpoint = JSON.parse('${endpointJson}')
       request_data = JSON.parse('${requestDataJson}')
 
       case endpoint
-        when "/session"
-        users = [
-          { id: 1, name: "ダイチ", email_address: "kamada@sample.com", password: "foobar0101" },
-          { id: 2, name: "カオル", email_address: "mitoma@sample.com", password: "foobar0101" },
-          { id: 3, name: "ワタル", email_address: "endo@sample.com", password: "foobar0101" }
-        ]
+      when "/session"
 
-        authorized_user = users.find do |user|
+        authorized_user = $users.find do |user|
           user[:email_address] == request_data["user"]["email_address"] && user[:password] == request_data["user"]["password"]
         end
 
@@ -66,6 +73,8 @@ function useMockAPI(): UseMockAPIReturn {
           authorized_user_without_credentials = { id: authorized_user[:id], name: authorized_user[:name] }
           JSON.generate(authorized_user_without_credentials)
         end
+      when "/books"
+        $books.to_json
       end
     `;
 

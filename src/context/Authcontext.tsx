@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { LoginUserInput } from "@/type/users/LoginUserInput";
 import { AuthorizedUser } from "@/type/users/AuthorizedUser";
 import axiosInstance from "@/utils/axios";
-import useMockAPI from "@/hooks/useMockAPI";
+import { mockAPIRequest } from "@/api/mockAPI";
 // import { createSession, deleteSession } from "@/api/session";
 
 interface AuthContextType {
@@ -22,12 +22,13 @@ type AuthProviderProps = {
 export const AuthProvider = ({ children }: AuthProviderProps ) => {
   const [user, setUser] = useState<AuthorizedUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { request, response, error } = useMockAPI();
 
   useEffect(() => {
     const checkUserAuthorized = async () => {
       try {
-        const response = await axiosInstance.get<AuthorizedUser>("users")
+        // const response = await axiosInstance.get<AuthorizedUser>("users")
+        const response = await mockAPIRequest("/users")
+        console.log(response.data)
         setUser(response.data)
       } catch {
         setUser(null)
@@ -40,23 +41,14 @@ export const AuthProvider = ({ children }: AuthProviderProps ) => {
   }, []);
 
   const createSession = async (data: LoginUserInput) => {
-    // 元々のコード（サーバーサイドとしてRailsの稼働が必要）
-    // const response = await axiosInstance.post<AuthorizedUser>("session", {
-    //   user: data
-    // })
-    // return response
-
-    // ruby.wasmによるmockAPIを使ったコード（フロントエンドのみのコードで動作を試すことができる）
-    await request("/session", { user: data })
-    if (!error) {
-      return response;
-    } else {
-      throw new Error
-    }
+    // const response = await axiosInstance.post<AuthorizedUser>("session", { user: data })
+    const response = await mockAPIRequest("/session", { user: data })
+    return response
   }
 
   const deleteSession = async () => {
-    const response = await axiosInstance.delete("session")
+    // const response = await axiosInstance.delete("session")
+    const response = await mockAPIRequest("/delete_session")
     return response
   }
 

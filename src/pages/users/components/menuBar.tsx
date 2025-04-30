@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from "react";
 import { Book } from "@/type/books/Book";
+import { mockAPIRequest } from "@/api/mockAPI";
 
 interface MenuBarProps {
   setBooks: React.Dispatch<React.SetStateAction<Book[]>>;
@@ -16,13 +17,15 @@ function MenuBar ({ setBooks }: MenuBarProps) {
   const [isSearchFieldHidden, setIsSearchFieldHidden] = useState(true)
   const { id } = useParams<{ id: string }>();
   const deleteSession = async () => {
-    const response = await axiosInstance.delete("http://localhost:3000/session");
+    // const response = await axiosInstance.delete("http://localhost:3000/session");
+    const response = await mockAPIRequest("/delete_session")
     return response;
   };
   const navigate = useNavigate();
   const getSearchedBooks = async (searchQuery: string) => {
     try {
-      const response = await axiosInstance.get<Book[]>(`http://localhost:3000/books?query=${encodeURIComponent(searchQuery)}`);
+      // const response = await axiosInstance.get<Book[]>(`http://localhost:3000/books?query=${encodeURIComponent(searchQuery)}`);
+      const response = await mockAPIRequest(`/books?query=${encodeURIComponent(searchQuery)}`);
       setBooks(response.data)
     } catch {
       alert('本情報の取得に失敗しました')

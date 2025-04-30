@@ -4,14 +4,15 @@ import MenuBar from "./components/menuBar"
 import BookList from "./components/bookList"
 import { useEffect, useState } from "react"
 import { Book } from "@/type/books/Book"
-import axiosInstance from "@/utils/axios"
+import { mockAPIRequest } from "@/api/mockAPI"
 
 function UserPage() {
   const [books, setBooks] = useState<Book[]>([])
   const [isBookFormVisible, setIsBookFromVisible] = useState(false)
   const getBooks = async () => {
     try {
-    const response = await axiosInstance.get<Book[]>("http://localhost:3000/books");
+    // const response = await axiosInstance.get<Book[]>("http://localhost:3000/books");
+    const response = await mockAPIRequest("/books");
     setBooks(response.data)
     } catch {
       alert('本情報の取得に失敗しました')

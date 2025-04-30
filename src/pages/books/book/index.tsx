@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import BookEditForm from "./components/bookEditForm";
 import ReviewBlock from "./components/reviewBlock";
+import { mockAPIRequest } from "@/api/mockAPI";
 
 function BookPage() {
   const { id } = useParams<{ id: string }>();
@@ -13,7 +14,8 @@ function BookPage() {
   const getBook = async (id: string | undefined) => {
     try {
       if (id) {
-        const response = await axiosInstance.get<Book>(`http://localhost:3000/books/${id}`);
+        // const response = await axiosInstance.get<Book>(`http://localhost:3000/books/${id}`);
+        const response = await mockAPIRequest(`/books/${id}`)
         setBook(response.data)
       }
     } catch {
