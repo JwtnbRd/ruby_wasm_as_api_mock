@@ -13,12 +13,14 @@ async function initializeRubyVM() {
   return rubyVM;
 }
 
+// ruby.wasmを初期化
 export async function mockAPIRequest(endpoint: string, params?: any): Promise<any> {
   const vm = await initializeRubyVM()
 
   const endpointJson = JSON.stringify(endpoint);
   const requestDataJson = JSON.stringify(params || {});
 
+  // Ruby code is here!!
   // $logged_in_userは本来は$logged_in_user ||= nilとしたいところであるが、ページリロードに合わせてRubyVMが初期化されてしまい、
   // $logged_in_userが永続化されないので、ここはログイン後のユーザーを想定してハードコードしている。
   const rubyCode = `
